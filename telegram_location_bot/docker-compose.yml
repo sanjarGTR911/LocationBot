@@ -1,0 +1,28 @@
+services:
+  bot:
+    build: .
+    container_name: telegram_location_bot
+    environment:
+      - TELEGRAM_BOT_TOKEN= # Replace with your actual token
+      - DB_HOST= # This will be the service name defined below for PostgreSQL
+      - DB_NAME= # Replace with your actual database name
+      - DB_USER= # Replace with your actual database user
+      - DB_PASSWORD= # Replace with your actual database password
+    volumes:
+      - .:/bot
+    depends_on:
+      - db
+    command: python bot.py
+
+  db:
+    image: postgres:alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: # Replace with your actual database name
+      POSTGRES_USER: # Replace with your actual database user
+      POSTGRES_PASSWORD: # Replace with your actual database password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
